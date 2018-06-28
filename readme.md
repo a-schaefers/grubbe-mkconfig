@@ -1,6 +1,7 @@
 ### Use at your own peril
-the goal of this script is to auto-generate plain grub.cfg zfs boot environment
-menuentry stanzas (disregards the video modes, font etc-- menu entries only.)
+The goal of this script is to auto-generate the most minimally possible, functional grub.cfg,
+populated with zfs boot environment menuentry stanzas only.
+The script purposefully disregards the video modes, font etc-- menu entries only.
 
 ### THIS IS A WORK-AROUND
 The real problem that needs to be fixed is that grub itself is not
