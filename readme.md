@@ -4,10 +4,10 @@ Free software
 the goal of this script is to auto-generate plain grub.cfg zfs boot environment
 menuentry stanzas (disregards the video modes, font etc-- menu entries only.)
 
-## <THIS IS A WORK-AROUND> ##
-#### Read below to see what compromises and standardization is necessary for this to work.
-#### The real problem that needs to be fixed is that grub itself is not
-#### 'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs...
+# <THIS IS A WORK-AROUND> ##
+Read below to see what compromises and standardization is necessary for this to work.
+The real problem that needs to be fixed is that grub itself is not
+'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs...
 
 # instructions
 
@@ -37,6 +37,6 @@ CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
 run ./grubbe-mkconfig > /boot/grub/grub.cfg
 Every time you beadm create, beadm rename, and beadm destroy
 
-make it better !
-submit improvements to github.com/a-schaefers/grubbe-mkconfig
-or email me sch@efers.org
+Please help me make this better. if you know a better way, open an issue, fork or please make a pull request.
+
+Thank you.
