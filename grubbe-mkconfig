@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# usage: ./grubbe-mkconfig > /boot/grub/grub.cfg
+# usage: grubbe-mkconfig > /boot/grub/grub.cfg
 # Every time on beadm create/rename/destroy
 # or hook it into your beadm script yourself.
 
@@ -15,7 +15,7 @@
 # enough in that it does not use the bootfs property when loading a kernel
 # and initramfs...
 
-# The goal of this script is to auto-generate the most minimally possible, 
+# The goal of this script is to auto-generate the most minimally possible,
 # functional grub.cfg, populated with zfs boot environment menuentry stanzas only.
 # The script purposefully disregards the video modes, font etc-- menu entries only.
 
@@ -34,7 +34,7 @@
 # This script assumes dracut was used for initramfs generation
 # by using the root=zfs:pool/ROOT/BeName convention on linux cmdline
 # if using genkernel or other, you will need to modify the line in the script:
-# root=zfs:${POOL_NAME}/ROOT/${BENAME}
+# root=zfs:${POOL_NAME}/ROOT/${BE_NAME}
 # to use your required formatting for your system.
 
 # 0.3)
@@ -55,7 +55,7 @@ KERNEL="vmlinuz"
 INITRAMFS="initramfs.img"
 
 # set kernel command line
-CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
+CMDLINE="elevator=noop zfs.force=1"
 
 # set root=''
 # tip: use grub-probe /boot/grub --target=bios_hints to see what should go here:
@@ -65,27 +65,27 @@ BIOS_HINTS="hd0,gpt1"
 ##############################################################################
 
 # get list of boot environments, one be per line
-BELIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
+BE_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
     awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
     ( $2 ~ /ROOT\// ) && \
     ( $4 == "/" || $4 == "none") \
     { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };')"
 
-# iterate over each line of the $BELIST, outputting our stanzas
+# iterate over each line of the $BE_LIST, outputting our stanzas
 IFS=$'\n'
-for BENAME in $BELIST
+for BE_NAME in $BE_LIST
 do
 
-cat <<EOF
-menuentry '${BENAME}' {
-	insmod gzio
-	insmod part_gpt
-	insmod zfs
-	set root='${BIOS_HINTS}'
-	echo	'Loading Linux ...'
-	linux	/ROOT/${BENAME}@/boot/${KERNEL} root=zfs:${POOL_NAME}/ROOT/${BENAME} ${CMDLINE}
-	echo	'Loading initial ramdisk ...'
-	initrd	/ROOT/${BENAME}@/boot/${INITRAMFS}
+    cat <<EOF
+menuentry '${BE_NAME}' {
+  insmod gzio
+  insmod part_gpt
+  insmod zfs
+  set root='${BIOS_HINTS}'
+  echo	'Loading Linux ...'
+  linux	/ROOT/${BE_NAME}@/boot/${KERNEL} root=zfs:${POOL_NAME}/ROOT/${BE_NAME} ${CMDLINE}
+  echo	'Loading initial ramdisk ...'
+  initrd	/ROOT/${BE_NAME}@/boot/${INITRAMFS}
     }
 EOF
 
