@@ -18,7 +18,7 @@
 # This script assumes dracut was used for initramfs generation
 # by using the root=zfs:pool/ROOT/BeName convention on linux cmdline
 # if using genkernel or other, you will need to modify the line in the script:
-# root=zfs:${POOL_NAME}/ROOT/$BENAME
+# root=zfs:${POOL_NAME}/ROOT/${BENAME}
 # to use your required formatting for your system.
 
 # 0.3)
