@@ -31,7 +31,7 @@
 # by using the root=zfs:pool/ROOT/BeName convention on linux cmdline
 # if using genkernel or other, you will need to modify the line in the script:
 # root=zfs:${POOL_NAME}/ROOT/$BENAME
-# to use your required formatting for your system by manually.
+# to use your required formatting for your system.
 
 # 1.)
 # This script assumes a static kernel naming convention.
@@ -53,8 +53,6 @@ CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
 # submit improvements to github.com/a-schaefers/grubbe-mkconfig
 # or email me sch@efers.org
 
-##############################################################################
-##############################################################################
 ##############################################################################
 ##############################################################################
 
@@ -84,15 +82,15 @@ for BENAME in $BELIST
 do
 
 cat <<EOF
-menuentry '$BENAME' {
+menuentry '${BENAME}' {
 	insmod gzio
 	insmod part_gpt
 	insmod zfs
 	set root='${BIOS_HINTS}'
 	echo	'Loading Linux ...'
-	linux	/ROOT/$BENAME@/boot/${KERNEL} root=zfs:${POOL_NAME}/ROOT/$BENAME ${CMDLINE}
+	linux	/ROOT/${BENAME}@/boot/${KERNEL} root=zfs:${POOL_NAME}/ROOT/${BENAME} ${CMDLINE}
 	echo	'Loading initial ramdisk ...'
-	initrd	/ROOT/$BENAME@/boot/${INITRAMFS}
+	initrd	/ROOT/${BENAME}@/boot/${INITRAMFS}
     }
 EOF
 
