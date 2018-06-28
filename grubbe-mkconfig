@@ -1,77 +1,54 @@
-#!/bin/bash
+#!/bin/sh
+
+# run ./grubbe-mkconfig > /boot/grub/grub.cfg
+# Every time you beadm create, beadm rename, and beadm destroy
 
 ################
-# about this   #
+# pre-setup
 ################
 
-# Use at your own peril -
-
-# The goal of this script is to auto-generate the most minimally possible,
-# functional grub.cfg, populated with zfs boot environment menuentry stanzas only.
-# The script purposefully disregards the video modes, font etc-- menu entries only.
-
-# THIS IS A WORK-AROUND
-# The real problem that needs to be fixed is that grub itself is not 'smart'
-# enough in that it does not use the bootfs property when loading a kernel and initramfs...
-
-################
-# instructions #
-################
-
-# 0.0.0) GPT is assumed here.
-
-# 0.0)
-# /boot/grub should be located on its own, separate dataset outside of ROOT.
-# in order to play nicely with boot environments, grub needs its own, unchanging location
-# This is because grub stage1 is hardwired to find grub in the same dataset every time.
-# (Not going to work well if /boot/grub is always moving around on various boot envs!!!)
+# 0.0) GPT is assumed here.
 
 # 0.1)
+# in order to play nicely with boot environments, grub needs an unchanging location
+# This is because grub stage1 is hardwired to find /boot/grub in the same dataset every time.
+# I recommend /boot/grub is located on its own, separate dataset outside of ROOT.
+
+# 0.2)
 # This script assumes dracut was used for initramfs generation
 # by using the root=zfs:pool/ROOT/BeName convention on linux cmdline
 # if using genkernel or other, you will need to modify the line in the script:
 # root=zfs:${POOL_NAME}/ROOT/$BENAME
 # to use your required formatting for your system.
 
-# 1.)
-# This script assumes a static kernel naming convention.
+# 0.3)
+# This script assumes a static (non-versioned) kernel naming convention.
 # We need unchanging kernel and initramfs names in order to make this work.
-# e.g. for /boot/vmlinuz
+
+
+################
+# set variables
+################
+
+# set name of pool containing the ROOT dataset
+POOL_NAME="zroot"
+
+# set kernel name (e.g. for /boot/vmlinuz)
 KERNEL="vmlinuz"
-# for /boot/initramfs.img
+
+# set initramfs name (e.g. for /boot/initramfs.img)
 INITRAMFS="initramfs.img"
 
-# 2.)
 # set kernel command line
 CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
 
-# 3.)
-# run ./grubbe-mkconfig > /boot/grub/grub.cfg
-# Every time you beadm create, beadm rename, and beadm destroy
+# set root=''
+# use grub-probe /boot/grub --target=bios_hints to see what should go here:
+BIOS_HINTS="hd0,gpt1"
 
-# make it better !
-# submit improvements to github.com/a-schaefers/grubbe-mkconfig
-# or email me sch@efers.org
 
 ##############################################################################
 ##############################################################################
-
-# find name of zfs pool that contains the ROOT dataset
-# this may not work correctly for people with multiple pools that contain a "ROOT" dataset.
-POOL_NAME="$(zfs list | grep -m 1 "ROOT" | cut -d '/' -f 1)"
-
-#ugly alert
-# I am looking for only one thing here, like hd0,gpt1 ...
-# problem I have without using "cut" is if you have multiple disks, then
-# grub-probe /boot/grub --target=bios_hints returns something like:
-# "hd1,gpt1 hd0,gpt1" and even more if more disks are in use I believe
-BIOS_HINTS="$(grub-probe /boot/grub --target=bios_hints \
-    | cut -d ' ' -f 1 \
-    | cut -d ' ' -f 1 \
-    | cut -d ' ' -f 1 \
-    | cut -d ' ' -f 1 \
-    | cut -d ' ' -f 1 \
-    | cut -d ' ' -f 1)"
 
 # get list of boot environments, one be per line
 BELIST="$(zfs list | grep "ROOT" | cut -d '/' -f 3 | cut -d ' ' -f 1)"
