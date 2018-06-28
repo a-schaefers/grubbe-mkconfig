@@ -1,11 +1,27 @@
 #!/bin/sh
 
-# run ./grubbe-mkconfig > /boot/grub/grub.cfg
-# Every time you beadm create, beadm rename, and beadm destroy
+# usage: ./grubbe-mkconfig > /boot/grub/grub.cfg
+# Every time on beadm create/rename/destroy
+# or hook it into your beadm script yourself.
 
-################
-# pre-setup
-################
+#################
+# preamble      #
+#################
+
+# Use at your own peril
+
+# THIS IS A WORK-AROUND
+# The real problem that needs to be fixed is that grub itself is not 'smart'
+# enough in that it does not use the bootfs property when loading a kernel
+# and initramfs...
+
+# The goal of this script is to auto-generate the most minimally possible, 
+# functional grub.cfg, populated with zfs boot environment menuentry stanzas only.
+# The script purposefully disregards the video modes, font etc-- menu entries only.
+
+#################
+# pre-setup     #
+#################
 
 # 0.0) GPT with legacy bios is assumed here. Otherwise, slight modification will be necessary.
 
@@ -25,10 +41,9 @@
 # This script assumes a static (non-versioned) kernel naming convention.
 # We need unchanging kernel and initramfs names in order to make this work.
 
-
-################
-# set variables
-################
+#################
+# set variables #
+#################
 
 # set name of pool containing the ROOT dataset
 POOL_NAME="zroot"
@@ -43,17 +58,20 @@ INITRAMFS="initramfs.img"
 CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
 
 # set root=''
-# use grub-probe /boot/grub --target=bios_hints to see what should go here:
+# tip: use grub-probe /boot/grub --target=bios_hints to see what should go here:
 BIOS_HINTS="hd0,gpt1"
-
 
 ##############################################################################
 ##############################################################################
 
 # get list of boot environments, one be per line
-BELIST="$(zfs list | grep "ROOT" | cut -d '/' -f 3 | cut -d ' ' -f 1)"
+BELIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
+    awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
+    ( $2 ~ /ROOT\// ) && \
+    ( $4 == "/" || $4 == "none") \
+    { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };')"
 
-#iterate over each line of the $BELIST, outputting our stanzas
+# iterate over each line of the $BELIST, outputting our stanzas
 IFS=$'\n'
 for BENAME in $BELIST
 do
