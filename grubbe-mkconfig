@@ -55,7 +55,7 @@ KERNEL="vmlinuz"
 INITRAMFS="initramfs.img"
 
 # set kernel command line
-CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
+CMDLINE="elevator=noop zfs.force=1"
 
 # set root=''
 # tip: use grub-probe /boot/grub --target=bios_hints to see what should go here:
