@@ -55,7 +55,7 @@ KERNEL="vmlinuz"
 INITRAMFS="initramfs.img"
 
 # set kernel command line
-CMDLINE="elevator=noop zfs.force=1"
+CMDLINE="elevator=noop intel_iommu=on iommu=pt ipv6.disable=1 zfs.force=1"
 
 # set root=''
 # tip: use grub-probe /boot/grub --target=bios_hints to see what should go here:
@@ -64,12 +64,20 @@ BIOS_HINTS="hd0,gpt1"
 ##############################################################################
 ##############################################################################
 
+# pre-loop settings
+cat <<EOF
+# use a 5 second timeout
+set default="0"
+set timeout=5
+EOF
+
 # get list of boot environments, one be per line
 BE_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
   awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
   ( $2 ~ /ROOT\// ) && \
   ( $4 == "/" || $4 == "none") \
-  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };')"
+  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
+    sort)"
 
 # iterate over each line of the $BE_LIST, outputting our stanzas
 IFS=$'\n'
