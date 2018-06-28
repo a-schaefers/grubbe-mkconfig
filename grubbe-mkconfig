@@ -66,27 +66,27 @@ BIOS_HINTS="hd0,gpt1"
 
 # get list of boot environments, one be per line
 BE_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
-    awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
-    ( $2 ~ /ROOT\// ) && \
-    ( $4 == "/" || $4 == "none") \
-    { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };')"
+  awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
+  ( $2 ~ /ROOT\// ) && \
+  ( $4 == "/" || $4 == "none") \
+  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };')"
 
 # iterate over each line of the $BE_LIST, outputting our stanzas
 IFS=$'\n'
 for BE_NAME in $BE_LIST
 do
 
-    cat <<EOF
+  cat <<EOF
 menuentry '${BE_NAME}' {
   insmod gzio
   insmod part_gpt
   insmod zfs
   set root='${BIOS_HINTS}'
-  echo	'Loading Linux ...'
-  linux	/ROOT/${BE_NAME}@/boot/${KERNEL} root=zfs:${POOL_NAME}/ROOT/${BE_NAME} ${CMDLINE}
-  echo	'Loading initial ramdisk ...'
-  initrd	/ROOT/${BE_NAME}@/boot/${INITRAMFS}
-    }
+  echo      'Loading Linux ...'
+  linux     /ROOT/${BE_NAME}@/boot/${KERNEL} root=zfs:${POOL_NAME}/ROOT/${BE_NAME} ${CMDLINE}
+  echo      'Loading initial ramdisk ...'
+  initrd    /ROOT/${BE_NAME}@/boot/${INITRAMFS}
+}
 EOF
 
 done
