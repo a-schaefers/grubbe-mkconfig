@@ -7,7 +7,7 @@
 # pre-setup
 ################
 
-# 0.0) GPT is assumed here.
+# 0.0) GPT with legacy bios is assumed here. Otherwise, slight modification will be necessary.
 
 # 0.1)
 # in order to play nicely with boot environments, grub needs an unchanging location
