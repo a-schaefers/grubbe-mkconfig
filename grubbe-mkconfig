@@ -1,32 +1,24 @@
 #!/bin/bash
 
-# Use at your own peril
-# Free software
+################
+# about this   #
+################
 
-################################
-#####                      #####
-####################     #######
-################  # ############
-##############  ################
-###########   ##################
-#########  #####################
-####### ########################
-###### #########################
-#####                      #####
-##############################fs
+# Use at your own peril -
 
-# the goal of this script is to auto-generate plain grub.cfg zfs boot environment
-# menuentry stanzas (disregards the video modes, font etc-- menu entries only.)
+# The goal of this script is to auto-generate the most minimally possible,
+# functional grub.cfg, populated with zfs boot environment menuentry stanzas only.
+# The script purposefully disregards the video modes, font etc-- menu entries only.
 
-#### <THIS IS A WORK-AROUND> ####
-# Read below to see what compromises and standardization is necessary for this to work.
-# The real problem that needs to be fixed is that grub itself is not
-# 'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs...
-####                         ####
+# THIS IS A WORK-AROUND
+# The real problem that needs to be fixed is that grub itself is not 'smart'
+# enough in that it does not use the bootfs property when loading a kernel and initramfs...
 
 ################
 # instructions #
 ################
+
+# 0.0.0) GPT is assumed here.
 
 # 0.0)
 # /boot/grub should be located on its own, separate dataset outside of ROOT.
@@ -37,6 +29,9 @@
 # 0.1)
 # This script assumes dracut was used for initramfs generation
 # by using the root=zfs:pool/ROOT/BeName convention on linux cmdline
+# if using genkernel or other, you will need to modify the line in the script:
+# root=zfs:${POOL_NAME}/ROOT/$BENAME
+# to use your required formatting for your system by manually.
 
 # 1.)
 # This script assumes a static kernel naming convention.
@@ -69,7 +64,7 @@ POOL_NAME="$(zfs list | grep -m 1 "ROOT" | cut -d '/' -f 1)"
 
 #ugly alert
 # I am looking for only one thing here, like hd0,gpt1 ...
-# problem I have without using "cut" is if you have multiple disks, then 
+# problem I have without using "cut" is if you have multiple disks, then
 # grub-probe /boot/grub --target=bios_hints returns something like:
 # "hd1,gpt1 hd0,gpt1" and even more if more disks are in use I believe
 BIOS_HINTS="$(grub-probe /boot/grub --target=bios_hints \
@@ -102,4 +97,3 @@ menuentry '$BENAME' {
 EOF
 
 done
-
