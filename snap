@@ -4,6 +4,16 @@
 
 # todo
 # iterate and rotate snaps
-# hook on reboots?
 
-beadm create snap_$(date -u +%F_%H%M)
+# get list of SNAP_ boot envs
+SNAPS="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
+  awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
+  ( $2 ~ /ROOT\// ) && \
+  ( $4 == "/" || $4 == "none") \
+  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
+    sort | \
+	grep -v 'snap_')"
+
+echo $SNAPS
+
+# beadm create snap_$(date -u +%F_%H%M)
