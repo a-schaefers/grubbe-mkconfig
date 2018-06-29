@@ -15,6 +15,13 @@ beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/
 
 Now you only "beadm create foobar" and the grub menu will be kept up to date.
 
+### One last thing
+I do recommend keeping the primary boot environment at the top of your grub menu by naming is something that begins with '00' and also to keeping it as the active boot environment. For example,
+
+beadm create 00main && beadm activate 00main
+
+This will allow 00main to autostart by grub since savedefault is not supported by GRUB for ZFS. This will also keep your zfs environment nice and consistent.
+
 ### Setup instructions:
 Read the script for details.
 
