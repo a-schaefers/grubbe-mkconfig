@@ -1,4 +1,6 @@
 #!/bin/sh
+# sch@efers.org
+# https://github.com/a-schaefers/grubbe-mkconfig
 
 # grubbe-mkconfig is a primitive script which can be used as a beadm wrapper to
 # automatically generate ZFS boot environment GRUB menu entries in Linux.
@@ -36,7 +38,8 @@
 
 # 0.3)
 # This script assumes a static (non-versioned) kernel naming convention.
-# We need unchanging kernel and initramfs names in order to make this work.
+# We need real (NOT SYMLINKS), unchanging kernel and initramfs names in
+# order to make this work.
 
 #################
 # set variables #
@@ -61,7 +64,7 @@ BIOS_HINTS="hd0,gpt1"
 ##############################################################################
 ##############################################################################
 
-# pre-loop settings
+# GRUB pre-menuentry settings
 cat <<EOF
 # use a 5 second timeout
 set default="0"
