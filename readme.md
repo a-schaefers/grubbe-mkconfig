@@ -1,11 +1,13 @@
-### The problem encountered
-Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD or OpenIndiana, Linux-beadm created boot environments do not display automatically in the GRUB menu.
+### ABOUT
+grubbe-mkconfig is a primitive script which can be used as a beadm wrapper to automatically generate ZFS boot environment GRUB menu entries in Linux.
 
-### Working around this GRUB limitation
-grubbe-mkconfig is a primitive script which can be used as a beadm wrapper to automatically generate ZFS boot environment GRUB menu entries in Linux. 
+Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD or OpenIndiana, Linux-beadm created boot environments do not display automatically in the GRUB menu. I am aware there is some grub-related code in these various beadm scripts that is disabled by default, but on first appearance it looked messy and hard to figure out what was going on. Instead of hacking on that script, I put together this little wrapper to do what I wanted.
 
-### THIS IS A WORK-AROUND
+### THIS REALLY IS A WORK-AROUND
 The real problem that needs to be fixed is that GRUB itself is not 'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs (rendering "beadm activate" nearly worthless)...
+
+### Working around GRUB limitations
+As I have said, GRUB does not work properly using the bootfs property and "beadm activate"-- so this method does not use the bootfs property to determine which boot environment to load. Instead, it creates hardcoded GRUB menuentries-- one per boot environment.
 
 ### Workflow example 1
 beadm create foobar && grubbe-mkconfig > /boot/grub/grub.cfg
