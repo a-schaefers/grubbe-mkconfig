@@ -20,7 +20,7 @@ I do recommend keeping the primary boot environment at the top of the GRUB menu 
 
 beadm create 00main && beadm activate 00main
 
-This will autostart 00main and is necessary because "savedefault" is not supported by GRUB for ZFS. This will also keep your ZFS environment nice and consistent.
+This will autostart 00main and is necessary because "savedefault" is not supported by GRUB for ZFS. This will also keep the ZFS environment nice and consistent.
 
 ### Setup instructions:
 Read the script for details.
