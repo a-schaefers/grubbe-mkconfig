@@ -7,7 +7,7 @@ Linux users have various beadm ports available, such as https://github.com/Tempt
 The real problem that needs to be fixed is that GRUB itself is not 'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs-- rendering "beadm activate" nearly worthless...
 
 ### Working around GRUB limitations
-Since GRUB does not naturally load the kernel and initramfs from the dataset specified by the bootfs property set using "beadm activate-- this here proposed "workaround" method does not use the bootfs property to determine which boot environment to load.
+Since GRUB does not naturally load the kernel and initramfs from the dataset specified by the bootfs property set using "beadm activate", this here proposed "workaround" method does not use the bootfs property to determine which boot environment to load.
 
 ### Workflow example 1
 beadm create foobar && grubbe-mkconfig > /boot/grub/grub.cfg
