@@ -32,7 +32,7 @@ fi
 # make a new SNAP_ boot env if SAVE_NUMBER has been reached or is less than reached
 if [ "$SNAP_NUM" -le "$SAVE_NUMBER" ] ;
 then
-/usr/local/sbin/beadm create SNAP_$(date -u +%F_%H%M%S)
+/usr/local/sbin/beadm create SNAP_$(date -u +%F_%H%M)
 fi
 
 # run grubbe-mkconfig
