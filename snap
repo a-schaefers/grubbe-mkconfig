@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# just starting, only conceptual right now ...
+
+# todo
+# iterate and rotate snaps
+# hook on reboots?
+
+beadm create snap_$(date -u +%F_%H%M)
