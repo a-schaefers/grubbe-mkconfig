@@ -1,25 +1,17 @@
 #!/bin/sh
 
-# usage: grubbe-mkconfig > /boot/grub/grub.cfg
+#################
+# usage:        #
+#################
 
-# Linux ports of the beadm script such as (https://github.com/TemptorSent/beadm)
-# may be wrapped with this script by placing in .bashrc as follows:
+# First create some boot environments using a Linux port of the beadm script
+# such as https://github.com/TemptorSent/beadm
+# Then create a grub.cfg populated with your zfs boot environments:
+# ./grubbe-mkconfig > /boot/grub/grub.cfg
+
+# beadm may be wrapped with this script by placing in .bashrc as follows:
 # beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg; }
-
-#################
-# preamble      #
-#################
-
-# Use at your own peril
-
-# THIS IS A WORK-AROUND
-# The real problem that needs to be fixed is that grub itself is not 'smart'
-# enough in that it does not use the bootfs property when loading a kernel
-# and initramfs...
-
-# The goal of this script is to auto-generate the most minimally possible,
-# functional grub.cfg, populated with zfs boot environment menuentry stanzas only.
-# The script purposefully disregards the video modes, font etc-- menu entries only.
+# Now the grub menu will be repopulated every time beadm is executed.
 
 #################
 # pre-setup     #
