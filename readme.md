@@ -1,5 +1,5 @@
 ### The problem encountered
-Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD and Solaris, beadm created boot environments do not display in the Grub menu.
+Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD or OpenIndiana, linux-beadm created boot environments do not display automatically in the Grub menu.
 
 ### THIS IS A WORK-AROUND
 The real problem that needs to be fixed is that grub itself is not 'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs (rendering "beadm activate" nearly worthless)...
