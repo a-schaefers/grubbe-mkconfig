@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # beadm snap / grub menu rotator for cron
 # https://github.com/a-schaefers/grubbe-mkconfig
 

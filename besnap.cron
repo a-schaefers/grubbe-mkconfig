@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# for cron.daily
+exec /usr/local/sbin/besnap
