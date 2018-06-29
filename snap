@@ -19,7 +19,6 @@ SNAP_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
 
 # get oldest SNAP_ boot env
 SNAP_OLD=$(echo "$SNAP_LIST" | head -n 1)
-echo $SNAP_OLD
 
 # count how many SNAP_ boot envs we have
 SNAP_NUM=$(echo "$SNAP_LIST" | grep "" -c)
@@ -30,7 +29,7 @@ then
   yes | /usr/local/sbin/beadm destroy $SNAP_OLD
 fi
 
-# make a new SNAP_ boot env
+# make a new SNAP_ boot env if SAVE_NUMBER has been reached or is less than reached
 if [ "$SNAP_NUM" -le "$SAVE_NUMBER" ] ;
 then
 /usr/local/sbin/beadm create SNAP_$(date -u +%F_%H%M%S)
