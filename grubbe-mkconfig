@@ -84,7 +84,7 @@ for BE_NAME in $BE_LIST
 do
 
   cat <<EOF
-menuentry '${BE_NAME}' {
+menuentry 'Boot Env. - ${BE_NAME}' {
   insmod gzio
   insmod part_gpt
   insmod zfs
