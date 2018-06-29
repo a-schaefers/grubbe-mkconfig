@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # usage: grubbe-mkconfig > /boot/grub/grub.cfg
-# Every time on beadm create/rename/destroy
-# or hook it into your beadm script yourself.
+
+# Linux ports of the beadm script such as (https://github.com/TemptorSent/beadm)
+# may be wrapped with this script by placing in .bashrc as follows:
+# beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg; }
 
 #################
 # preamble      #
