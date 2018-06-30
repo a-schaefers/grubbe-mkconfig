@@ -14,16 +14,16 @@ Since GRUB does not naturally load the kernel and initramfs from the dataset spe
 ### grubbe-mkconfig assumptions
 
 ##### This script does not create boot environments, it only updates the GRUB menu.
-##### 
+
 ##### Root datasets should be arranged in standard tank/ROOT/bename format.
-##### 
+
 ##### This script assumes dracut was used for initramfs generation by using the root=zfs:pool/ROOT/BeName convention. If using genkernel or other, you will need to modify the line in the script which contains root=zfs:${POOL_NAME}/ROOT/${BE_NAME} to use your required formatting for your system configuration.
 ##### 
 ##### GPT with legacy bios is also assumed here. If you need MBR, change the "insmod part_gpt" line.
-##### 
+
 ##### In order to play nicely with boot environments, grub needs an unchanging location. This is because the grub stage1 is designed to find the stage2 /boot/grub files in a static location. I recommend /boot/grub is located on its own, separate dataset outside of ROOT, such as tank/GRUB, similar to what follows: zfs create -o mountpoint=/boot/grub tank/GRUB
-##### 
-##### This script assumes a static (non-versioned) kernel naming convention. Arch linux does this by default. However you do it, this is required. We need real (NOT SYMLINKS), unchanging kernel and initramfs names in order to make this work-around work.
+
+##### This script assumes a static (non-versioned) kernel naming convention. Arch linux does this by default. However you do it, this is required. We need real (NOT SYMLINKS), unchanging kernel and initramfs names in order to make this work-around work. **< hint: a pull request that iterates,mounts and reads all boot env kernel names /boot directories and created kernel specific stanzas would be gladly accepted.**
 
 ### One last thing...
 I do recommend keeping the primary boot environment at the top of the GRUB menu by naming it starting with '00' and also keeping it as the "activated" boot environment. For example,
