@@ -1,6 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-# create fallback if it doesn't exist already
 FALLBACK="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
   awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
   ( $2 ~ /ROOT\// ) && \
@@ -10,11 +9,14 @@ FALLBACK="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
     grep 'fallback')"
 if [ "$FALLBACK" == "" ] ;
 then
+  # create fallback if it doesn't exist already
   /usr/local/sbin/beadm create fallback
-  exit
-fi
-
-# destroy and recreate fallback
+else
+  # otherwise destroy fallback and recreate it
 yes | /usr/local/sbin/beadm destroy fallback &&
 /usr/local/sbin/beadm create fallback
+fi
+
+# update boot loader
+/usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg
 
