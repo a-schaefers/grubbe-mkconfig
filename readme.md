@@ -1,7 +1,7 @@
 ### ABOUT
 ![Grub Menu with Boot Envs](https://github.com/a-schaefers/grubbe-mkconfig/raw/master/pic.jpg)
 
-grubbe-mkconfig is a primitive script which can be used as a beadm wrapper to automatically generate ZFS boot environment GRUB menu entries in Linux.
+**grubbe-mkconfig is a primitive script which can be used as a beadm wrapper to automatically generate ZFS boot environment GRUB menu entries in Linux.**
 
 Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD or OpenIndiana, Linux-beadm created boot environments do not display automatically in the GRUB menu. I am aware there is some grub-related code in these various beadm scripts that is disabled by default, but on first appearance it looked messy and hard to figure out what was going on. Instead of hacking on that script, with the help of a friend I put together this little wrapper to do what I wanted.
 
@@ -27,14 +27,15 @@ beadm create 00main && beadm activate 00main
 This will set 00main to auto load after 5 seconds and is necessary because "savedefault" is not supported by GRUB for ZFS. Keeping the activated boot environment set to the one that you are primarily using will help to make sense of various zfs list and beadm list features, keeping the ZFS environment nice and consistent.
 
 ### About besnap besnap.cron and befallback
+##### Note: These do not replace zfs-auto-snapshot, zfs-auto-snapshot from the zfsonlinux project is high quality software. This is my own personal tools that I am sharing because I didn't only want reliable snapshots, but fully automated boot environments on my boot loader in addition to the tools zfs-auto-snapshot gives us. Definitely check out https://github.com/zfsonlinux/zfs-auto-snapshot as well. I use both zfs-auto-snapshot AND beadm with grubbe-mkconfig/besnap for various applications...
 
-besnap and besnap.cron can be used to create and rotate cron.daily boot environment "snapshots." And can also be easily modified for other creative ideas, perhaps running the script on every startup, then you know you would always be able to restore to the point of when you last turned on the computer!
+**besnap and besnap.cron** can be used with cron.daily to create and rotate boot environment "snapshots." They can also be modified for other interesting ideas, perhaps running the script on every startup, then you know you would always be able to restore to the point of when you last turned on the computer!
 
-befallback uses "fallback" and "fallback.old" and rotates/recreates the two automatically upon every execution. This is for certain situations before performing a "risky" operation-- first manually run befallback, then you will have a working "fallback" boot environment plus one extra "fallback.old" to reboot into upon worst case scenarios.
+**befallback** uses "fallback" and "fallback.old" and rotates/recreates the two automatically upon every execution. This is for certain situations before performing a "risky" operation-- first manually run befallback, then you will have a recent "fallback" boot environment plus one extra "fallback.old" to reboot into upon worst case scenarios.
 
 Of course beadm alone is sufficient and these are only helper tools. Sometimes we may know ahead that a rollback will be needed, such as for testing various software or configurations that we don't intend to keep permanently on a system. In that case, take advantage of beadm's create/bind/mount/chroot features and reboot in the new temporary env for testing. This is my favorite part of using grubbe-mkconfig, after it is setup properly, when I "beadm create experimental", I know when I reboot it will be listed on the grub menu.
 
-### Setup instructions:
+### grubbe-mkconfig Setup instructions:
 Read the script for details.
 
 ### contribute
