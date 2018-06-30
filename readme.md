@@ -36,11 +36,15 @@ This will set 00main to auto load after 5 seconds and is necessary because "save
 
 First create some boot environments using a Linux port of the beadm script such as https://github.com/TemptorSent/beadm. Then create a grub.cfg populated with your zfs boot environments:
 
-./grubbe-mkconfig > /boot/grub/grub.cfg
+```bash
+grubbe-mkconfig > /boot/grub/grub.cfg
+```
 
 beadm may also be wrapped with this script by placing in .bashrc as follows:
 
+```bash
 beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg; }
+```
 
 Now the grub menu will be repopulated every time beadm is executed.
 
