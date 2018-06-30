@@ -30,7 +30,9 @@ This will set 00main to auto load after 5 seconds and is necessary because "save
 
 besnap and besnap.cron can be used to create and rotate daily boot environment "snapshots."
 
-befallback simply destroys a boot env called "fallback.old" and then renames another env "fallback" again to fallback.old-- and then again finally recreates a new "fallback" boot env. The use case for this is for a situation where you are about to run a "risky" command-- first manually run "befallback", and then you know you have a working recent boot environment + the one from before that to reboot into during worst case scenarios.
+befallback simply destroys a boot env called "fallback.old" and then renames another env "fallback" again to fallback.old-- and then again finally recreates a new fallback boot env. The use case for this is for situations where you are about to run a "risky" command-- first manually run "befallback", and then you know you have a working recent boot environment plus one extra to reboot into during worst case scenarios.
+
+Of course beadm alone is sufficient and these are only helper tools. Sometimes we may know ahead that a rollback will be needed, such as for testing various software or configurations that we don't intend to keep permanently on a system. In that case, take advantage of beadm's create/bind/mount/chroot features and reboot in the new temporary env for testing. This is my favorite part of using grubbe-mkconfig, after it is setup properly, when I "beadm create experimental", I know when I reboot it will be listed on the grub menu.
 
 ### Setup instructions:
 Read the script for details.
