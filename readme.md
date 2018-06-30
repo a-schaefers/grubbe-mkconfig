@@ -23,7 +23,7 @@ GPT with legacy bios is also assumed here. If you need MBR, change the "insmod p
 
 In order to play nicely with boot environments, grub needs an unchanging location. This is because the grub stage1 is designed to find the stage2 /boot/grub files in a static location. I recommend /boot/grub is located on its own, separate dataset outside of ROOT, such as tank/GRUB, similar to what follows: zfs create -o mountpoint=/boot/grub tank/GRUB
 
-This script assumes a static (non-versioned) kernel naming convention. Arch linux does this by default, personally I would not recommend Arch and would recommend Funtoo or Gentoo-- but however you do it, this is required. We need real (NOT SYMLINKS), unchanging kernel and initramfs names in order to make this work-around work. < a pull request that mounts and iterates all boot environment kernels and initramfs names, creating kernel-specific stanzas would be gladly accepted. Until then, we need a static kernel naming convention/compromise.
+This script assumes a static (non-versioned) kernel naming convention. Arch linux does this by default, I recommend Funtoo or Gentoo so you can change anything however you want-- but however you do it, this is a required step. We need real (NOT SYMLINKS), unchanging kernel and initramfs names in order to make this work-around work. < a pull request that mounts and iterates all boot environment kernels and initramfs names, creating kernel-specific stanzas would be gladly accepted. Until then, we need a static kernel naming convention/compromise.
 
 ### One last thing...
 I do recommend keeping the primary boot environment at the top of the GRUB menu by naming it starting with '00' and also keeping it as the "activated" boot environment. For example,
