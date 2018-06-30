@@ -1,44 +1,17 @@
 #!/bin/sh
-
-# https://github.com/a-schaefers/grubbe-mkconfig
-# grubbe-mkconfig is a primitive script which can be used as a beadm wrapper to
+# grubbe-mkconfig is a simple script which can be used as a beadm wrapper to
 # automatically generate ZFS boot environment GRUB menu entries in Linux.
 
-#################
-# usage:        #
-#################
+# for this to work it is very important to have your system setup
+# properly, this script requires some certain conventions are followed as
+# described in readme.md
+# https://github.com/a-schaefers/grubbe-mkconfig
 
-# First create some boot environments using a Linux port of the beadm script
-# such as https://github.com/TemptorSent/beadm
-# Then create a grub.cfg populated with your zfs boot environments:
-# ./grubbe-mkconfig > /boot/grub/grub.cfg
+# Usage:
+# grubbe-mkconfig > /boot/grub/grub.cfg
 
-# beadm may be wrapped with this script by placing in .bashrc as follows:
+# Or as a wrapper around beadm:
 # beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg; }
-# Now the grub menu will be repopulated every time beadm is executed.
-
-#################
-# pre-setup     #
-#################
-
-# 0.0) GPT with legacy bios is assumed here. Otherwise, slight modification will be necessary.
-
-# 0.1)
-# in order to play nicely with boot environments, grub needs an unchanging location
-# This is because grub stage1 is hardwired to find /boot/grub in the same dataset every time.
-# I recommend /boot/grub is located on its own, separate dataset outside of ROOT.
-
-# 0.2)
-# This script assumes dracut was used for initramfs generation
-# by using the root=zfs:pool/ROOT/BeName convention on linux cmdline
-# if using genkernel or other, you will need to modify the line in the script:
-# root=zfs:${POOL_NAME}/ROOT/${BE_NAME}
-# to use your required formatting for your system.
-
-# 0.3)
-# This script assumes a static (non-versioned) kernel naming convention.
-# We need real (NOT SYMLINKS), unchanging kernel and initramfs names in
-# order to make this work.
 
 #################
 # set variables #
@@ -56,8 +29,9 @@ INITRAMFS="initramfs.img"
 # set kernel command line
 CMDLINE="elevator=noop zfs.force=1"
 
-# set root=''
-# tip: use grub-probe /boot/grub --target=bios_hints to see what should go here:
+# grub's set root=''
+# tip: use grub-probe /boot/grub --target=bios_hints
+# or look within your existing /boot/grub/grub.cfg
 BIOS_HINTS="hd0,gpt1"
 
 ##############################################################################
