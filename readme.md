@@ -24,7 +24,13 @@ I do recommend keeping the primary boot environment at the top of the GRUB menu 
 
 beadm create 00main && beadm activate 00main
 
-This will autostart 00main and is necessary because "savedefault" is not supported by GRUB for ZFS. This will also keep the ZFS environment nice and consistent.
+This will set 00main to auto load after 5 seconds and is necessary because "savedefault" is not supported by GRUB for ZFS. Keeping the activated boot environment set to the one that you are primarily using will help to make sense of various zfs list and beadm list features, keeping the ZFS environment nice and consistent.
+
+### About besnap besnap.cron and befallback
+
+besnap and besnap.cron can be used to take create and rotate daily boot environment "snapshots"
+
+befallback on the other hand, is to be used by the administrator manually. It creates a "fallback" and a "fallback.old" boot environment. On execution, "fallback.old" is destroyed, then "fallback" is renamed to "fallback.old"-- finally a new "fallback" is created. The use case for this is for a situation where you are about to run a "risky" command-- first manually run "befallback", and then you know you have a safe and current boot environment to reboot into upon a doomsday scenario.
 
 ### Setup instructions:
 Read the script for details.
