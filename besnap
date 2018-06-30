@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # beadm snap / grub menu rotator for cron
 # https://github.com/a-schaefers/grubbe-mkconfig
 
@@ -8,11 +8,15 @@ BE_PREFIX="snap_"
 # set date format
 DATE_FORMAT="$(date +%F_%H%M)"
 
-# number of "snaps" to keep in the GRUB menu?
+# number of "snaps" to keep in rotation?
 SAVE_NUMBER="3"
 
 #################################################
 #################################################
+
+# if a besnap named env is currently in use, bail
+[ ! "$(/sbin/zfs mount | grep $BE_PREFIX)" ] || \
+     { echo "For safety besnap does not execute on $BE_PREFIX-named environments."; exit $ERRCODE; }
 
 # get list of snaps
 SNAP_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
