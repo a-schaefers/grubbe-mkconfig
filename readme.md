@@ -51,6 +51,6 @@ Now the grub menu will be repopulated every time beadm is executed.
 
 **befallback** uses "fallback" and "fallback.old" and rotates/recreates the two automatically upon every execution. This is for certain situations before performing a "risky" operation-- first manually run befallback, then you will have a recent "fallback" boot environment plus one extra "fallback.old" to reboot into upon worst case scenarios.
 
-# contribute
+### Contribute
 Please help make this better. If you know a better way, open an issue, fork or please make a pull request. Thanks.
 
