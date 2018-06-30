@@ -45,13 +45,12 @@ beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/
 Now the grub menu will be repopulated every time beadm is executed.
 
 ### About besnap besnap.cron and befallback
-##### Note: These do not replace zfs-auto-snapshot, zfs-auto-snapshot from the zfsonlinux project is high quality software. This is my own personal tools that I am sharing because I didn't only want reliable snapshots, but fully automated boot environments on my boot loader in addition to the tools zfs-auto-snapshot gives us. Definitely check out https://github.com/zfsonlinux/zfs-auto-snapshot as well. I use both zfs-auto-snapshot AND beadm with grubbe-mkconfig/besnap for various applications...
+##### Note: These tools do not replace zfs-auto-snapshot. zfs-auto-snapshot from the zfsonlinux project is high quality software. These are my own personal tools that I am sharing because I didn't only want reliable snapshots, but fully automated boot environments on my boot loader in addition to what zfs-auto-snapshot gives. I use both zfs-auto-snapshot AND beadm with grubbe-mkconfig/besnap...
 
 **besnap and besnap.cron** can be used with cron.daily to create and rotate boot environment "snapshots." They can also be modified for other interesting ideas, perhaps running the script on every startup, then you know you would always be able to restore to the point of when you last turned on the computer!
 
 **befallback** uses "fallback" and "fallback.old" and rotates/recreates the two automatically upon every execution. This is for certain situations before performing a "risky" operation-- first manually run befallback, then you will have a recent "fallback" boot environment plus one extra "fallback.old" to reboot into upon worst case scenarios.
 
-Of course beadm alone is sufficient and these are only helper tools. Sometimes we may know ahead that a rollback will be needed, such as for testing various software or configurations that we don't intend to keep permanently on a system. In that case, take advantage of beadm's create/bind/mount/chroot features and reboot in the new temporary env for testing. This is my favorite part of using grubbe-mkconfig, after it is setup properly, when I "beadm create experimental", I know when I reboot it will be listed on the grub menu.
-
 # contribute
 Please help make this better. If you know a better way, open an issue, fork or please make a pull request. Thanks.
+
