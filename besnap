@@ -5,6 +5,9 @@
 # number of boot env "snaps" to keep in the GRUB menu?
 SAVE_NUMBER="3"
 
+# uncomment next line for universal time stamps
+# UT="-u"
+
 #################################################
 #################################################
 
@@ -32,7 +35,7 @@ fi
 # make a new SNAP_ boot env if SAVE_NUMBER has been reached or is less than reached
 if [ "$SNAP_NUM" -le "$SAVE_NUMBER" ] ;
 then
-/usr/local/sbin/beadm create SNAP_$(date -u +%F_%H%M)
+/usr/local/sbin/beadm create SNAP_$(date $UT +%F_%H%M)
 fi
 
 # run grubbe-mkconfig
