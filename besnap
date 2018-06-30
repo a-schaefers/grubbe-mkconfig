@@ -18,7 +18,7 @@ SNAP_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
   ( $4 == "/" || $4 == "none") \
   { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
     sort | \
-	grep 'SNAP_')"
+	grep 'snap_')"
 
 # get oldest SNAP_ boot env
 SNAP_OLD=$(echo "$SNAP_LIST" | head -n 1)
@@ -35,7 +35,7 @@ fi
 # make a new SNAP_ boot env if SAVE_NUMBER has been reached or is less than reached
 if [ "$SNAP_NUM" -le "$SAVE_NUMBER" ] ;
 then
-/usr/local/sbin/beadm create SNAP_$(date $UT +%F_%H%M)
+/usr/local/sbin/beadm create snap_$(date $UT +%F_%H%M)
 fi
 
 # run grubbe-mkconfig
