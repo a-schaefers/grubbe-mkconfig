@@ -2,42 +2,45 @@
 # beadm snap / grub menu rotator for cron
 # https://github.com/a-schaefers/grubbe-mkconfig
 
-# number of boot env "snaps" to keep in the GRUB menu?
+# set a BE name prefix
+BE_PREFIX="snap_"
+
+# set date format
+DATE_FORMAT="$(date +%F_%H%M)"
+
+# number of "snaps" to keep in the GRUB menu?
 SAVE_NUMBER="3"
 
-# uncomment next line for universal time stamps
-# UT="-u"
-
 #################################################
 #################################################
 
-# get list of "SNAP_" boot envs
+# get list of snaps
 SNAP_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
   awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
   ( $2 ~ /ROOT\// ) && \
   ( $4 == "/" || $4 == "none") \
   { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
     sort | \
-	grep 'snap_')"
+	grep $BE_PREFIX)"
 
-# get oldest SNAP_ boot env
-SNAP_OLD=$(echo "$SNAP_LIST" | head -n 1)
-
-# count how many SNAP_ boot envs we have
+# count how many snaps we have
 SNAP_NUM=$(echo "$SNAP_LIST" | grep "" -c)
 
-# destroy oldest snap if SAVE_NUMBER has been reached
+# get oldest snap
+SNAP_OLD=$(echo "$SNAP_LIST" | head -n 1)
+
+# destroy oldest snap
 if [ "$SNAP_NUM" -ge "$SAVE_NUMBER" ] ;
 then
   yes | /usr/local/sbin/beadm destroy $SNAP_OLD
 fi
 
-# make a new SNAP_ boot env if SAVE_NUMBER has been reached or is less than reached
+# make a new snap
 if [ "$SNAP_NUM" -le "$SAVE_NUMBER" ] ;
 then
-/usr/local/sbin/beadm create snap_$(date $UT +%F_%H%M)
+/usr/local/sbin/beadm create $BE_PREFIX$DATE_FORMAT
 fi
 
-# run grubbe-mkconfig
+# populate the boot loader
 /usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg
 
