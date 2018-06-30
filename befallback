@@ -1,0 +1,46 @@
+#!/bin/bash
+
+be_fallback() {
+
+# does fallback.old exist?
+FALLBACK_OLD="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
+  awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
+  ( $2 ~ /ROOT\// ) && \
+  ( $4 == "/" || $4 == "none") \
+  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
+    sort | \
+    grep 'fallback.old')"
+
+if [ "$FALLBACK_OLD" == "" ] ;
+then
+  /usr/local/sbin/beadm create fallback.old && be_fallback
+fi
+
+# does fallback exist?
+FALLBACK="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
+  awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
+  ( $2 ~ /ROOT\// ) && \
+  ( $4 == "/" || $4 == "none") \
+  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
+    sort | \
+    grep -v 'fallback.old' | \
+    grep 'fallback')"
+
+if [ "$FALLBACK" == "" ] ;
+then
+  /usr/local/sbin/beadm create fallback && be_fallback
+fi
+
+# destroy fallback.old
+yes | /usr/local/sbin/beadm destroy fallback.old &&
+
+# rename fallback to fallback.old
+/usr/local/sbin/beadm rename fallback fallback.old &&
+
+# create a new fallback 
+/usr/local/sbin/beadm create fallback
+
+}
+
+# execute
+be_fallback
