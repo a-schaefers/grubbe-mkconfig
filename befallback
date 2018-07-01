@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# do nothing if on a fallback env
+[ ! "$(/sbin/zfs mount | grep fallback)" ] || \
+  { echo "befallback does not execute if a fallback boot environment is in use. Use beadm." ; exit; }
+
 echo "destroying fallback.old ..."
 yes | /usr/local/sbin/beadm destroy fallback.old
 echo "renaming fallback to fallback.old"
