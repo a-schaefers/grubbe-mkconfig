@@ -56,7 +56,7 @@ for BE_NAME in $BE_LIST
 do
 
   cat <<EOF
-menuentry 'Boot Env. - ${BE_NAME}' {
+menuentry 'Boot Env. - ${BE_NAME}' --class gnu-linux --class os {
   insmod gzio
   insmod part_gpt
   insmod zfs
