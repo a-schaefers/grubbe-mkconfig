@@ -16,7 +16,7 @@ SAVE_NUMBER="3"
 
 # exit if a besnap named env is currently in use
 [ ! "$(/sbin/zfs mount | grep $BE_PREFIX)" ] || \
-  { echo "For safety $(pwd)/besnap does not execute if the $BE_PREFIX prefixed boot environment is in use." | /usr/bin/logger; exit; }
+  { echo "For safety, besnap does not execute if the $BE_PREFIX prefixed boot environment is in use." | /usr/bin/logger; exit; }
 
 # get list of snaps
 SNAP_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
