@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # beadm snap / grub menu rotator for cron
 # https://github.com/a-schaefers/grubbe-mkconfig
 
@@ -47,4 +47,3 @@ fi
 
 # populate the boot loader
 /usr/local/sbin/grubbe-mkconfig > /boot/grub/grub.cfg
-

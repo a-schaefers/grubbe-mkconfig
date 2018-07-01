@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # grubbe-mkconfig is a simple script which can be used as a beadm wrapper to
 # automatically generate ZFS boot environment GRUB menu entries in Linux.
 
