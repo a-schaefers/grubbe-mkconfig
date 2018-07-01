@@ -40,6 +40,9 @@ First configure the script variables:
 # set variables #
 #################
 
+# set what comes before the BeName in the menuentry
+MENUENTRY_PREFIX="Funtoo GNU/Linux"
+
 # set name of pool containing the ROOT dataset
 POOL_NAME="zroot"
 
@@ -50,7 +53,7 @@ KERNEL="vmlinuz"
 INITRAMFS="initramfs.img"
 
 # set kernel command line
-CMDLINE="elevator=noop zfs.force=1"
+CMDLINE="elevator=noop zfs_force=1"
 
 # grub's set root=''
 # tip: use grub-probe /boot/grub --target=bios_hints
