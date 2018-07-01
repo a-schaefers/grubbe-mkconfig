@@ -3,7 +3,7 @@
 
 **grubbe-mkconfig is a simple script which can be used as a beadm wrapper to automatically generate ZFS boot environment GRUB menu entries in Linux.**
 
-Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD or OpenIndiana, Linux-beadm created boot environments do not display automatically in the GRUB menu. I am aware there is some grub-related code in these various beadm scripts that is disabled by default, but on first appearance it looked messy and hard to figure out what was going on. Instead of hacking on that script, with the help of a friend I put together this little wrapper to do what I wanted.
+Linux users have various beadm ports available, such as https://github.com/TemptorSent/beadm, but unlike FreeBSD or OpenIndiana, Linux-beadm created boot environments do not display automatically in the GRUB menu. I am aware there is some GRUB-related code in these various beadm scripts that is disabled by default, but on first appearance it looked messy and hard to figure out what was going on. Instead of hacking on that script, with the help of a friend I put together this little wrapper to do what I wanted.
 
 ### THIS REALLY IS A WORK-AROUND
 The real problem that needs to be fixed is that GRUB itself is not 'smart' enough in that it does not use the bootfs property when loading a kernel and initramfs-- rendering "beadm activate" nearly worthless...
@@ -15,13 +15,13 @@ Since GRUB does not naturally load the kernel and initramfs from the dataset spe
 
 This script does not create boot environments, it only updates the GRUB menu.
 
-Root datasets should be arranged in standard tank/ROOT/bename format.
+Root datasets should be arranged in standard pool/ROOT/bename format.
 
 This script assumes dracut was used for initramfs generation by using the root=zfs:pool/ROOT/BeName convention. If using genkernel or other, you will need to modify the line in the script which contains root=zfs:${POOL_NAME}/ROOT/${BE_NAME} to use your required formatting for your system configuration.
 
 GPT with legacy bios is also assumed here. If you need MBR, change the "insmod part_gpt" line.
 
-In order to play nicely with boot environments, grub needs an unchanging location. This is because the grub stage1 is designed to find the stage2 /boot/grub files in a static location. I recommend /boot/grub is located on its own, separate dataset outside of ROOT, such as tank/GRUB, similar to what follows: zfs create -o mountpoint=/boot/grub tank/GRUB
+In order to play nicely with boot environments, grub needs an unchanging location. This is because the grub stage1 is designed to find the stage2 /boot/grub files in a static location. I recommend /boot/grub is located on its own, separate dataset outside of ROOT, such as pool/GRUB, similar to what follows: zfs create -o mountpoint=/boot/grub pool/GRUB
 
 This script assumes a static (non-versioned) kernel naming convention. Arch linux does this by default, I recommend Funtoo or Gentoo so you can change anything however you want-- but however you do it, this is a required step. We need real (NOT SYMLINKS), unchanging kernel and initramfs names in order to make this work-around work. < a pull request that mounts and iterates all boot environment kernels and initramfs names, creating kernel-specific stanzas would be gladly accepted. Until then, we need a static kernel naming convention/compromise.
 
@@ -33,8 +33,34 @@ beadm create 00main && beadm activate 00main
 This will set 00main to auto load after 5 seconds and is necessary because "savedefault" is not supported by GRUB for ZFS. Keeping the activated boot environment set to the one that you are primarily using will help to make sense of various zfs list and beadm list features, keeping the ZFS environment nice and consistent.
 
 ### grubbe-mkconfig USAGE EXAMPLE
+First configure the script variables:
 
-First create some boot environments using a Linux port of the beadm script such as https://github.com/TemptorSent/beadm. Then create a grub.cfg populated with your zfs boot environments:
+```bash
+#################
+# set variables #
+#################
+
+# set name of pool containing the ROOT dataset
+POOL_NAME="zroot"
+
+# set kernel name (e.g. for /boot/vmlinuz)
+KERNEL="vmlinuz"
+
+# set initramfs name (e.g. for /boot/initramfs.img)
+INITRAMFS="initramfs.img"
+
+# set kernel command line
+CMDLINE="elevator=noop zfs.force=1"
+
+# grub's set root=''
+# tip: use grub-probe /boot/grub --target=bios_hints
+# or look within your existing /boot/grub/grub.cfg
+BIOS_HINTS="hd0,gpt1"
+```
+
+Then create some boot environments using a Linux port of the beadm script such as https://github.com/TemptorSent/beadm.
+
+Finally create a grub.cfg populated with your zfs boot environments:
 
 ```bash
 grubbe-mkconfig > /boot/grub/grub.cfg
