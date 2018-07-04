@@ -1,5 +1,3 @@
-# I rock ZFS on Funtoo Linux and it's awesome. </shameless promotion>
-
 ### ABOUT
 ![Grub Menu with Boot Envs](https://github.com/a-schaefers/grubbe-mkconfig/raw/master/pic.jpg)
 
