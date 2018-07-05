@@ -78,7 +78,7 @@ beadm() { /usr/local/sbin/beadm "$@" && /usr/local/sbin/grubbe-mkconfig > /boot/
 Now the grub menu will be repopulated every time beadm is executed.
 
 ### About besnap besnap.cron and befallback
-##### Note: These tools do not replace zfs-auto-snapshot. zfs-auto-snapshot from the zfsonlinux project is high quality software. These are my own personal tools that I am sharing because I didn't only want reliable snapshots, but fully automated boot environments on my boot loader in addition to what zfs-auto-snapshot gives. I use both zfs-auto-snapshot AND beadm with grubbe-mkconfig/besnap...
+##### Note: These tools do not replace zfs-auto-snapshot. zfs-auto-snapshot from the zfsonlinux project is high quality software. These are my own personal tools that I am sharing because I didn't only want reliable snapshots, but fully automated boot environments on my boot loader in addition to what zfs-auto-snapshot gives. I use zfs-auto-snapshot with cron to automate snapshots of my HOME directory. I use beadm with grubbe-mkconfig/besnap also with cron to manage boot environments and the grub menu.
 
 **besnap and besnap.cron** can be used with cron.daily to create and rotate boot environment "snapshots." They can also be modified for other interesting ideas, perhaps running the script on every startup, then you know you would always be able to restore to the point of when you last turned on the computer!
 
