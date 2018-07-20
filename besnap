@@ -2,7 +2,7 @@
 # beadm snap / grub menu rotator for cron
 # https://github.com/a-schaefers/grubbe-mkconfig
 
-# set a BE name prefix
+# set a __unique__ BE name prefix
 BE_PREFIX="snap_"
 
 # set date format
@@ -14,18 +14,12 @@ SAVE_NUMBER="3"
 #################################################
 #################################################
 
-# exit if a besnap named env is currently in use
+# sanity check
 [ ! "$(/sbin/zfs mount | grep $BE_PREFIX)" ] || \
-  { echo "For safety, besnap does not execute if the $BE_PREFIX prefixed boot environment is in use." | /usr/bin/logger; exit; }
+  { echo "For safety, besnap does not execute if the $BE_PREFIX prefixed boot environment is in use." | logger; exit; }
 
 # get list of snaps
-SNAP_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | \
-  awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && \
-  ( $2 ~ /ROOT\// ) && \
-  ( $4 == "/" || $4 == "none") \
-  { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | \
-    sort | \
-	grep $BE_PREFIX)"
+SNAP_LIST="$(/sbin/zfs list | grep "ROOT" | cut -d '/' -f 3 | cut -d ' ' -f 1 | sort | grep $BE_PREFIX)"
 
 # count how many snaps we have
 SNAP_NUM=$(echo "$SNAP_LIST" | grep "" -c)
