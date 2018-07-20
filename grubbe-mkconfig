@@ -45,8 +45,10 @@ set default="0"
 set timeout=5
 EOF
 
-# get list of boot environments, one be per line
-BE_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && ( $2 ~ /ROOT\// ) && ( $4 == "/" || $4 == "none") { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | sort)"
+# get list of ROOT boot environments, one be per line
+BE_LIST="$(zfs list | grep "ROOT" | cut -d '/' -f 3 | cut -d ' ' -f 1)"
+# fix me ! https://github.com/a-schaefers/grubbe-mkconfig/issues/1
+# BE_LIST="$(/sbin/zfs list -H -d 2 -o type,name,canmount,mountpoint | awk 'BEGIN  { FS="\t"; split("",mounts); }; ( $1 ~ /filesystem/ ) && ( $2 ~ /ROOT\// ) && ( $4 == "/" || $4 == "none") { mounts[$2]=$0; }; END { for (m in mounts) { gsub(/.*\//, "", m); print m; }; };' | sort)"
 
 # iterate over each line of the $BE_LIST, outputting our stanzas
 IFS=$'\n'
