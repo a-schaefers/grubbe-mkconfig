@@ -1,3 +1,6 @@
+## unmaintained
+I moved to NixOS where system rollbacks on the bootloader are aleady fully supported by default. It's different than zfs boot environments, but I like it better than this, and this script I was working on when I was new to bash / sh and needs a lot of work, sorry about the mess if anyone uses it. :-)
+
 ### ABOUT
 ![Grub Menu with Boot Envs](https://github.com/a-schaefers/grubbe-mkconfig/raw/master/pic.jpg)
 
@@ -86,4 +89,3 @@ Now the grub menu will be repopulated every time beadm is executed.
 
 ### Contribute
 Please help make this better. If you know a better way, open an issue, fork or please make a pull request. Thanks.
-
