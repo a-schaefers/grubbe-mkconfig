@@ -1,5 +1,7 @@
+# use zedenv
+It does everything this project dreamed of doing and more. https://github.com/johnramsden/zedenv
+
 ## unmaintained
-I moved to NixOS where system rollbacks on the bootloader are aleady fully supported by default. It's different than zfs boot environments, but I like it better than this, and this script I was working on when I was new to bash / sh and needs a lot of work, sorry about the mess if anyone uses it. :-)
 
 ### ABOUT
 ![Grub Menu with Boot Envs](https://github.com/a-schaefers/grubbe-mkconfig/raw/master/pic.jpg)
